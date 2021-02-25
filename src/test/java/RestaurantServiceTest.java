@@ -24,12 +24,17 @@ class RestaurantServiceTest {
         restaurant.addToMenu("Vegetable lasagne", 269);
     }
 
+    /**
+     * This method clears the restaurant added to the list of restaurants in RestaurantService
+     */
     @AfterEach
     public void remove_added_restaurant_from_restaurant_list() {
         try{
             service.removeRestaurant("Amelie's cafe");
         } catch (restaurantNotFoundException e) {
-            System.out.println(e.getMessage());
+            /**
+             * We will skip if the restaurant is not present
+             */
         }
 
     }
@@ -41,7 +46,6 @@ class RestaurantServiceTest {
         assertEquals(restaurant, service.findRestaurantByName("Amelie's cafe"));
     }
 
-    //You may watch the video by Muthukumaran on how to write exceptions in Course 3: Testing and Version control: Optional content
     @Test
     public void searching_for_non_existing_restaurant_should_throw_exception() throws restaurantNotFoundException {
         assertThrows(restaurantNotFoundException.class, () -> service.findRestaurantByName("Pantry d'or"));

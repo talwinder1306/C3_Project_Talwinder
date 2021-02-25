@@ -10,8 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RestaurantTest {
     Restaurant restaurant;
-    //REFACTOR ALL THE REPEATED LINES OF CODE
 
+
+    /**
+     * This method initializes a restaurant object
+     * Since we need one object for running each test, we run this before each
+     */
     @BeforeEach
     private void add_restaurant_to_restaurant_list() {
         LocalTime openingTime = LocalTime.parse("10:30:00");
@@ -22,7 +26,14 @@ class RestaurantTest {
     }
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>OPEN/CLOSED<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    //-------FOR THE 2 TESTS BELOW, YOU MAY USE THE CONCEPT OF MOCKING, IF YOU RUN INTO ANY TROUBLE
+
+    /**
+     * This method uses a partial mocked restaurant object since we need to check the values present in the object,
+     * to determine if the current time is between open and closing time.
+     * Here, we are generating a Random time between the restaurant's opening and closing time.
+     * We mock the call to getCurrentTime() to return this random number between the restaurant's opening and closing time.
+     * And we expect the isRestaurantOpen() method to return true
+     */
     @Test
     public void is_restaurant_open_should_return_true_if_time_is_between_opening_and_closing_time(){
         Restaurant mockRestaurant = Mockito.spy(restaurant);
@@ -32,18 +43,32 @@ class RestaurantTest {
         assertTrue(mockRestaurant.isRestaurantOpen());
     }
 
-    private LocalTime getRandomTimeBetween(LocalTime openingTime, LocalTime closingTime) {
+    /**
+     *
+     * @param lowerBound
+     * @param upperBound
+     * @return Random time between lower and upper bound
+     */
+    private LocalTime getRandomTimeBetween(LocalTime lowerBound, LocalTime upperBound) {
         return LocalTime.ofSecondOfDay(ThreadLocalRandom
                 .current()
-                .nextInt(openingTime.toSecondOfDay(), closingTime.toSecondOfDay()));
+                .nextInt(lowerBound.toSecondOfDay(), upperBound.toSecondOfDay()));
     }
-
+    /**
+     * This method uses a partial mocked restaurant object since we need to check the values present in the object,
+     * to determine if the current time is outside open and closing time.
+     * Here, we are generating a Random time between the restaurant's closing and opening time i.e. the outside hours.
+     * We mock the call to getCurrentTime() to return this random number between the restaurant's outside hours.
+     * And we expect the isRestaurantOpen() method to return false
+     */
     @Test
     public void is_restaurant_open_should_return_false_if_time_is_outside_opening_and_closing_time(){
         Restaurant mockRestaurant = Mockito.spy(restaurant);
+
         LocalTime betweenMidnightAndOpen = getRandomTimeBetween(LocalTime.MIDNIGHT, mockRestaurant.openingTime);
         LocalTime betweenCloseAndMidnight = getRandomTimeBetween(mockRestaurant.closingTime, LocalTime.parse("23:59:59"));
         LocalTime betweenCloseAndOpen = Math.random() < 0.5 ? betweenMidnightAndOpen : betweenCloseAndMidnight;
+
         Mockito.when(mockRestaurant.getCurrentTime()).thenReturn(betweenCloseAndOpen);
 
         assertFalse(mockRestaurant.isRestaurantOpen());
