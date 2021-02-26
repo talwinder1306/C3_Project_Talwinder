@@ -47,8 +47,8 @@ class RestaurantTest {
 
     /**
      *
-     * @param lowerBound
-     * @param upperBound
+     * @param lowerBound - the lower bound of time range
+     * @param upperBound - the upper bound of time range
      * @return Random time between lower and upper bound
      */
     private LocalTime getRandomTimeBetween(LocalTime lowerBound, LocalTime upperBound) {
@@ -116,10 +116,12 @@ class RestaurantTest {
 
     @Test
     public void get_order_total_should_return_388_if_first_and_second_item_selected() {
+        restaurant.addToMenu("Sizzling Brownie", 319);
+        restaurant.addToMenu("Alfredo Pasta", 249);
         List<String> itemNames = new ArrayList<>();
         itemNames.add("Sweet corn soup");
         itemNames.add("Vegetable lasagne");
-        int expectedOrderTotal = 388;
+        int expectedOrderTotal = restaurant.getMenu().get(0).getPrice() + restaurant.getMenu().get(1).getPrice();
         assertEquals(expectedOrderTotal, restaurant.getOrderTotal(itemNames));
     }
 

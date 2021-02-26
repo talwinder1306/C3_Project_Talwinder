@@ -72,4 +72,19 @@ public class Restaurant {
         return name;
     }
 
+    /**
+     * the method returns the total price of all item passed provided the items are present in menu
+     *
+     * @param itemNames - List of item names selected for order
+     * @return total price of items passed
+     */
+    public int getOrderTotal(List<String> itemNames) {
+        int total = 0;
+        for(String itemName: itemNames) {
+            Item item = findItemByName(itemName);
+            total += (item != null) ? item.getPrice() : 0;
+        }
+
+        return total;
+    }
 }
