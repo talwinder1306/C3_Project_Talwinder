@@ -3,6 +3,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,7 +19,7 @@ class RestaurantTest {
      * Since we need one object for running each test, we run this before each
      */
     @BeforeEach
-    private void add_restaurant_to_restaurant_list() {
+    private void create_restaurant_object() {
         LocalTime openingTime = LocalTime.parse("10:30:00");
         LocalTime closingTime = LocalTime.parse("22:00:00");
         restaurant = new Restaurant("Amelie's cafe", "Chennai", openingTime, closingTime);
@@ -97,4 +99,31 @@ class RestaurantTest {
                 ()->restaurant.removeFromMenu("French fries"));
     }
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    //<<<<<<<<<<<<<<<<<<<<<<<ORDER>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    /**
+     * We need to calculate the total cost of menu items selected
+     * We will pass the items name as string to the method
+     * the method returns the order amount which should be a int.
+     * No need to save selected items
+     */
+
+    @Test
+    public void get_order_total_should_return_0_if_list_is_empty() {
+        List<String> itemNames = new ArrayList<>();
+        assertEquals(0, restaurant.getOrderTotal(itemNames));
+    }
+
+    @Test
+    public void get_order_total_should_return_388_if_first_and_second_item_selected() {
+        List<String> itemNames = new ArrayList<>();
+        itemNames.add("Sweet corn soup");
+        itemNames.add("Vegetable lasagne");
+        int expectedOrderTotal = 388;
+        assertEquals(expectedOrderTotal, restaurant.getOrderTotal(itemNames));
+    }
+
+    //<<<<<<<<<<<<<<<<<<<<<<<ORDER>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
 }
